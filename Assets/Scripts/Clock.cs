@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,11 +14,14 @@ public class Clock : MonoBehaviour
     public List<RingData> rings;
     public float innerRadius;
     public float ringSpacing;
+    public event Action<int> Tick;
+    public int ticks;
 
     // Start is called before the first frame update
     void Start()
     {
-        time = 0;
+        time = 0f;
+        ticks = 0;
         rings = new List<RingData>
         {
             new RingData(2, 0, new List<int> { 1 }),
@@ -37,6 +41,14 @@ public class Clock : MonoBehaviour
     void Update()
     {
         time += Time.deltaTime * speed;
+        if (time >= ticks + 1)
+        {
+            ticks++;
+            if (Tick != null)
+            {
+                Tick(ticks);
+            }
+        }
     }
 }
 

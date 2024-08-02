@@ -430,11 +430,11 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 1
       value: 1
-      inSlope: 0
-      outSlope: 0
+      inSlope: 0.35826758
+      outSlope: 0.35826758
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0
+      inWeight: 0.3423962
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
@@ -443,6 +443,7 @@ MonoBehaviour:
   speed: 1
   innerRadius: 1
   ringSpacing: 0.7
+  ticks: 0
 --- !u!4 &1740297101
 Transform:
   m_ObjectHideFlags: 0

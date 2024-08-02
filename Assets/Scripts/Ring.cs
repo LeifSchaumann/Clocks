@@ -11,15 +11,15 @@ public class Ring : MonoBehaviour
     public Transform bellAnchor;
     public Transform handAnchor;
 
+    public Clock clock;
     public int handPos;
 
     private float radius;
-    private int m;
-    private int r;
+    public int m;
+    public int r;
     private List<int> bells;
     private bool rotating;
     private float rotationStartTime;
-    private Clock clock;
     private LineRenderer lineRenderer;
 
     public void Initialize(RingData data, float rad)
@@ -53,7 +53,8 @@ public class Ring : MonoBehaviour
         {
             if (bells.Contains(((i - r) % m + m) % m))
             {
-                Instantiate(bellPrefab, dotPos(i), Quaternion.identity, bellAnchor);
+                Bell bell = Instantiate(bellPrefab, dotPos(i), Quaternion.identity, bellAnchor).GetComponent<Bell>();
+                bell.Initialize(i);
             }
             else
             {
