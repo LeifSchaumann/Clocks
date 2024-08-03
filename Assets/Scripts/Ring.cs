@@ -68,10 +68,26 @@ public class Ring : MonoBehaviour
 
     void Update()
     {
+        /*
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            Rotate();
+        }
+        */
         int ticksPassed = Mathf.FloorToInt(clock.time);
         handPos = ticksPassed % m;
         float tickProgress = clock.time - ticksPassed;
         handAnchor.transform.rotation = Quaternion.Euler(0, 0, -360f * ((handPos + clock.tickAC.Evaluate(tickProgress)) / m));
+
+        if (rotating && clock.time <= rotationStartTime + clock.rotationDuration)
+        {
+            float progress = (clock.time - rotationStartTime)/ clock.rotationDuration;
+            bellAnchor.transform.rotation = Quaternion.Euler(0, 0, -360f * ((r - 1f + clock.rotationAC.Evaluate(progress)) / m));
+        } else
+        {
+            rotating = false;
+            bellAnchor.transform.rotation = Quaternion.Euler(0, 0, -360f * (float)r / m);
+        }
     }
 
     private Vector3 dotPos(int n)
@@ -86,7 +102,7 @@ public class Ring : MonoBehaviour
         {
             rotationStartTime = clock.time;
             rotating = true;
-            r = (r + m - 1) % m;
+            r = (r + 1) % m;
             return true;
         }
     }

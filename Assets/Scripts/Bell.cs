@@ -24,10 +24,10 @@ public class Bell : MonoBehaviour
 
     public void Tick(int t)
     {
-        if ((pos - ring.r - t) % ring.m == 0)
+        if ((pos + ring.r - t) % ring.m == 0)
         {
             ps.Emit(1);
-            audioSource.Play();
+            audioSource.PlayOneShot(audioSource.clip);
         }
     }
 

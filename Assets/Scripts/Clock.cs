@@ -11,31 +11,58 @@ public class Clock : MonoBehaviour
     public AnimationCurve tickAC;
     public float time;
     public float speed;
-    public List<RingData> rings;
+    public List<RingData> ringDatas;
     public float innerRadius;
     public float ringSpacing;
     public event Action<int> Tick;
     public int ticks;
     public List<float> pitches;
+    private List<Ring> rings;
 
     // Start is called before the first frame update
     void Start()
     {
         time = 0f;
         ticks = 0;
-        pitches = new List<float> { 0.5f, 0.74915f, 0.62996f, 0.8409f, 1f };
-        rings = new List<RingData>
+        for (int i = 0; i <= 12; i++)
+        {
+            pitches.Add(0.5f * Mathf.Pow(2, (float)i / 12));
+        }
+        /*
+        ringDatas = new List<RingData>
         {
             new RingData(2, 0, new List<int> { 1 }, pitches[0]),
-            new RingData(3, 0, new List<int> { 2 }, pitches[1]),
-            new RingData(4, 0, new List<int> { 2 }, pitches[2]),
-            new RingData(6, 0, new List<int> { 4 }, pitches[3]),
-            new RingData(12, 0, new List<int> { 0 }, pitches[4]),
+            new RingData(3, 0, new List<int> { 2 }, pitches[4]),
+            new RingData(4, 0, new List<int> { 2 }, pitches[7]),
+            new RingData(6, 0, new List<int> { 4 }, pitches[9]),
+            new RingData(12, 0, new List<int> { 0 }, pitches[12]),
         };
-        for (int i = 0; i < rings.Count; i++)
+        */
+        /*
+        ringDatas = new List<RingData>
+        {
+            new RingData(2, 0, new List<int> { 1 }, pitches[0]),
+            new RingData(3, 0, new List<int> { 2 }, pitches[4]),
+            new RingData(5, 0, new List<int> { 0 }, pitches[7]),
+            new RingData(6, 0, new List<int> { 4 }, pitches[2]),
+            new RingData(10, 0, new List<int> { 2 }, pitches[5]),
+            new RingData(15, 0, new List<int> { 3 }, pitches[9]),
+            new RingData(30, 0, new List<int> { 6, 24 }, pitches[12])
+        };*/
+        ringDatas = new List<RingData>
+        {
+            new RingData(2, 0, new List<int> { 0 }, pitches[0]),
+            new RingData(3, 0, new List<int> { 0 }, pitches[4]),
+            new RingData(4, 0, new List<int> { 0 }, pitches[7]),
+            new RingData(6, 0, new List<int> { 0 }, pitches[9]),
+            new RingData(12, 0, new List<int> { 0 }, pitches[12]),
+        };
+        rings = new List<Ring>();
+        for (int i = 0; i < ringDatas.Count; i++)
         {
             Ring ring = Instantiate(ringPrefab, transform).GetComponent<Ring>();
-            ring.Initialize(rings[i], innerRadius + ringSpacing * i);
+            ring.Initialize(ringDatas[i], innerRadius + ringSpacing * i);
+            rings.Add(ring);
         }
     }
 
@@ -49,6 +76,17 @@ public class Clock : MonoBehaviour
             if (Tick != null)
             {
                 Tick(ticks);
+            }
+        }
+        if (Input.GetMouseButtonDown(0))
+        {
+            Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            mouseWorldPos.Set(mouseWorldPos.x, mouseWorldPos.y, 0f);
+            float distance = (transform.position - mouseWorldPos).magnitude;
+            int layer = Mathf.FloorToInt((distance - innerRadius)/ringSpacing + 0.5f);
+            if (layer >= 0 && layer < rings.Count)
+            {
+                rings[layer].Rotate();
             }
         }
     }
