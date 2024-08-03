@@ -21,6 +21,7 @@ public class Ring : MonoBehaviour
     private bool rotating;
     private float rotationStartTime;
     private LineRenderer lineRenderer;
+    public float pitch;
 
     public void Initialize(RingData data, float rad)
     {
@@ -31,6 +32,7 @@ public class Ring : MonoBehaviour
         r = data.r;
         bells = data.bells;
         radius = rad;
+        pitch = data.pitch;
 
         int numSegments = 100;
 
